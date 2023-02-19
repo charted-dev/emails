@@ -151,8 +151,8 @@ jobs:
             org.opencontainers.image.source=https://github.com/charted-dev/email-service
           tags: |
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}-alpine-amd64,
-            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}-alpine--amd64,
-            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine--amd64,
+            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}-alpine-amd64,
+            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine-amd64,
             ghcr.io/charted-dev/email-service:latest-alpine-amd64
   docker-arm:
     name: Build Docker image (x86_64)
