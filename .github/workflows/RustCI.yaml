@@ -66,6 +66,9 @@ jobs:
       - name: Setup Rust cache
         uses: Swatinem/rust-cache@v2
 
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+
       - name: Check for compile errors
         run: cargo build
         env:
