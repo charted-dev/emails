@@ -67,7 +67,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install Protoc
-        uses: Noelware/setup-protoc@1.0.0
+        uses: Noelware/setup-protoc@1.0.1
         with:
           repo-token: ${{secrets.GITHUB_TOKEN}}
 
