@@ -97,7 +97,7 @@ jobs:
 
       - name: Get commit hash
         id: commit-hash
-        run: echo "$(git rev-parse --short=8 $GITHUB_SHA)" >> $GITHUB_OUTPUT
+        run: echo "::set-output name=commit::$(git rev-parse --short=8 $GITHUB_SHA)"
 
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v2
