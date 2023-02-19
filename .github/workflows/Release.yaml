@@ -241,8 +241,8 @@ jobs:
         with:
           inputs: ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine
           images: |
-            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major-alpine-amd64,
-            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major-alpine-arm64
+            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine-amd64,
+            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine-arm64
 
       - name: Merge Debian [${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}] images
         uses: Noelware/docker-manifest-action@0.3.1
