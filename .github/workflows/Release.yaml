@@ -83,8 +83,8 @@ jobs:
           endpoint: ${{secrets.S3_ENDPOINT}}
           prefix: /noelware/artifacts
           bucket: august
-  docker:
-    name: Build Docker image
+  docker-x64:
+    name: Build Docker image (x86_64)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -134,6 +134,56 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-amd64,
             ghcr.io/charted-dev/email-service:latest-amd64
 
+      - name: Build and push [Alpine, linux/amd64]
+        uses: docker/build-push-action@v4
+        with:
+          platforms: linux/amd64
+          context: .
+          file: ./distribution/docker/alpine/Dockerfile
+          push: true
+          labels: |
+            org.opencontainers.image.title=charted-emails
+            org.opencontainers.image.description=🐻‍❄️💌 charted's email service built in Rust that can be connected via gRPC
+            org.opencontainers.image.version=${{steps.tag.outputs.version}}
+            org.opencontainers.image.revision=${{steps.commit-hash.outputs.commit}}
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.documentation=https://charts.noelware.org/docs/services/emails/${{steps.tag.outputs.version}}
+            org.opencontainers.image.source=https://github.com/charted-dev/email-service
+          tags: |
+            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}-alpine-amd64,
+            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}-alpine--amd64,
+            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine--amd64,
+            ghcr.io/charted-dev/email-service:latest-alpine-amd64
+  docker-arm:
+    name: Build Docker image (x86_64)
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Get current release tag
+        uses: auguwu/git-tag-action@master
+        id: tag
+
+      - name: Get commit hash
+        id: commit-hash
+        run: echo "::set-output name=commit::$(git rev-parse --short=8 $GITHUB_SHA)"
+
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Login into GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: charted-dev
+          password: ${{secrets.GITHUB_TOKEN}}
+
       - name: Build and push [Debian, linux/arm64]
         uses: docker/build-push-action@v4
         with:
@@ -155,27 +205,6 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-arm64,
             ghcr.io/charted-dev/email-service:latest-arm64
 
-      - name: Build and push [Alpine, linux/amd64]
-        uses: docker/build-push-action@v4
-        with:
-          platforms: linux/amd64
-          context: .
-          file: ./distribution/docker/alpine/Dockerfile
-          push: true
-          labels: |
-            org.opencontainers.image.title=charted-emails
-            org.opencontainers.image.description=🐻‍❄️💌 charted's email service built in Rust that can be connected via gRPC
-            org.opencontainers.image.version=${{steps.tag.outputs.version}}
-            org.opencontainers.image.revision=${{steps.commit-hash.outputs.commit}}
-            org.opencontainers.image.licenses=MIT
-            org.opencontainers.image.documentation=https://charts.noelware.org/docs/services/emails/${{steps.tag.outputs.version}}
-            org.opencontainers.image.source=https://github.com/charted-dev/email-service
-          tags: |
-            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}-alpine-amd64,
-            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}-alpine--amd64,
-            ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine--amd64,
-            ghcr.io/charted-dev/email-service:latest-alpine-amd64
-
       - name: Build and push [Alpine, linux/arm64]
         uses: docker/build-push-action@v4
         with:
@@ -196,6 +225,14 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}-alpine-arm64,
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine-arm64,
             ghcr.io/charted-dev/email-service:latest-alpine-arm64
+  manifests:
+    name: Merge manifests
+    runs-on: ubuntu-latest
+    needs: [docker-x64, docker-arm]
+    steps:
+      - name: Get current release tag
+        uses: auguwu/git-tag-action@master
+        id: tag
 
       - name: Merge Debian [latest] images
         uses: Noelware/docker-manifest-action@0.3.1
@@ -263,7 +300,7 @@ jobs:
   deploy:
     name: Deploy to Noelware's infrastructure
     runs-on: ubuntu-latest
-    needs: [docker]
+    needs: [manifests]
     if: ${{false}}
     steps:
       - name: Get current release tag
