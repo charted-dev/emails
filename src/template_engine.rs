@@ -33,6 +33,15 @@ impl TemplateEngine {
         }
     }
 
+    /// Could the file in the path be found?
+    pub async fn find<P: AsRef<Path>>(&self, path: P) -> Result<bool> {
+        match File::open(path.as_ref()).await {
+            Ok(_) => Ok(true),
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(false),
+            Err(e) => Err(Error::Io(e)),
+        }
+    }
+
     /// Renders a template with the given path and context object
     pub async fn render<P: AsRef<Path>, C: Into<mustache::Data>>(
         &self,

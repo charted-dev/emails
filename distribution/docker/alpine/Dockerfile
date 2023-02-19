@@ -15,4 +15,52 @@
 
 FROM rustlang/rust:nightly-alpine3.15 AS builder
 
+RUN apk update && apk add --no-cache build-base openssl-dev gcompat libc6-compat libarchive-tools curl
+
+# First, we need to install protoc
+ENV PROTOC_VERSION="22.0"
+RUN set -eux; \
+  arch="$(uname -m)"; \
+  case "${arch}" in \
+    aarch64|arm64) \
+      PROTOC_DOWNLOAD_URL="https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-aarch_64.zip"; \
+      ;; \
+    amd64|x86_64) \
+      PROTOC_DOWNLOAD_URL="https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"; \
+      ;; \
+  esac; \
+  mkdir -p /opt/protoc; \
+  curl -L ${PROTOC_DOWNLOAD_URL} | bsdtar xfz - --strip-components=1 -C /opt/protoc; \
+  chmod +x /opt/protoc/protoc;
+
+ENV PROTOC=/opt/protoc/protoc
+ENV CARGO_INCREMENTAL=1
+WORKDIR /build
+
+COPY Cargo.toml .
+RUN echo "fn main() {}" >> dummy.rs
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+ENV RUSTFLAGS=-Ctarget-feature=-crt-static
+RUN cargo build --release
+RUN rm dummy.rs && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+
+COPY . .
+RUN cargo build --release
+
 FROM alpine:3.17
+
+RUN apk update && apk add --no-cache bash tini openssl-dev gcompat libc6-compat libgcc openssl1.1-compat
+WORKDIR /app/noelware/charted/emails
+
+COPY --from=builder /build/target/release/emails /app/noelware/charted/emails/bin/emails
+COPY distribution/docker/scripts                 /app/noelware/charted/emails/scripts
+
+EXPOSE 32121
+RUN addgroup -g 1001 noelware && \
+    adduser -DSH -u 1001 -G noelware noelware && \
+    chown 1001:1001 /app/noelware/charted/emails && \
+    chmod +x /app/noelware/charted/emails/bin/emails /app/noelware/charted/emails/scripts/docker-entrypoint.sh
+
+USER noelware
+ENTRYPOINT ["/app/noelware/charted/emails/scripts/docker-entrypoint.sh"]
+CMD ["/app/noelware/charted/emails/bin/emails"]

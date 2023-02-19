@@ -39,7 +39,7 @@ async fn main() -> Result {
 
     info!("listening on http addr {http_addr}!");
     Server::builder()
-        .add_service(EmailsServer::new(EmailService::default()))
+        .add_service(EmailsServer::new(EmailService::new().await?))
         .serve(http_addr)
         .await
         .map_err(|e| to_dyn_error!(e))

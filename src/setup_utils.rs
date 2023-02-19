@@ -139,8 +139,8 @@ pub fn logging(config: &Config) -> Result {
                 let level = color.paint(format!("{:<5}", record.level()));
                 let (b1, b2) = (RGB(134, 134, 134).paint("["), RGB(134, 134, 134).paint("]"));
                 let (p1, p2) = (RGB(134, 134, 134).paint("("), RGB(134, 134, 134).paint(")"));
-                let target = RGB(120, 231, 255).paint(format!("{:<15}", record.target()));
-                let thread_name = RGB(255, 105, 189).paint(format!("{name:>15}"));
+                let target = RGB(120, 231, 255).paint(format!("{:<50}", record.target()));
+                let thread_name = RGB(255, 105, 189).paint(format!("{name:>25}"));
                 let pid_colour = RGB(169, 147, 227).paint(pid.to_string());
 
                 out.finish(format_args!(

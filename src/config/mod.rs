@@ -13,71 +13,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+mod logging;
+mod server;
+mod smtp;
+
+use crate::{error::*, to_dyn_error};
 use std::{
     fs::File,
     net::SocketAddr,
     path::{Path, PathBuf},
-    str::FromStr,
 };
 
-use crate::{
-    error::{Error, Result},
-    to_dyn_error,
-};
-
-use log::LevelFilter;
+pub use logging::*;
 use once_cell::sync::OnceCell;
-use serde::{Deserialize, Serialize};
+pub use server::*;
+pub use smtp::*;
 
 static CONFIG: OnceCell<Config> = OnceCell::new();
 
-/// Trait for implementing `T` from environment variables. This is used in the
-/// `generate_config_struct` macro.
 pub trait FromEnv<T> {
     fn from_env() -> T;
-}
-
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum LogLevel {
-    Off,
-    #[default]
-    Info,
-    Warn,
-    Error,
-    Debug,
-    Trace,
-}
-
-impl LogLevel {
-    pub fn to_level_filter(&self) -> LevelFilter {
-        match self {
-            LogLevel::Trace => LevelFilter::Trace,
-            LogLevel::Debug => LevelFilter::Debug,
-            LogLevel::Error => LevelFilter::Error,
-            LogLevel::Warn => LevelFilter::Warn,
-            LogLevel::Info => LevelFilter::Info,
-            LogLevel::Off => LevelFilter::Off,
-        }
-    }
-}
-
-impl FromStr for LogLevel {
-    type Err = Error;
-
-    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        match s {
-            "off" => Ok(LogLevel::Off),
-            "info" => Ok(LogLevel::Info),
-            "warn" => Ok(LogLevel::Warn),
-            "error" => Ok(LogLevel::Error),
-            "debug" => Ok(LogLevel::Debug),
-            "trace" => Ok(LogLevel::Trace),
-            _ => Err(Error::UnknownLogLevel {
-                level: s.to_owned(),
-            }),
-        }
-    }
 }
 
 #[macro_export]
@@ -100,7 +55,7 @@ macro_rules! generate_config_struct {
             )*
         }
 
-        impl FromEnv<$name> for $name {
+        impl $crate::FromEnv<$name> for $name {
             fn from_env() -> $name {
                 $name {
                     $(
@@ -153,103 +108,19 @@ generate_config_struct!(Config {
     pub server: ServerConfig => {
         on_env -> ServerConfig::from_env();
         on_default -> ServerConfig::default();
+    },
+
+    ///
+    /// SMTP configuration
+    #[serde(default)]
+    pub smtp: SmtpConfig => {
+        on_env -> SmtpConfig::from_env();
+        on_default -> SmtpConfig::default();
     }
 });
 
 fn default_templates_dir() -> PathBuf {
     "./templates".parse().expect("unable to parse into PathBuf")
-}
-
-generate_config_struct!(SmtpConfig {
-    ///
-    /// The SMTP host to connect to
-    #[serde(default = "localhost")]
-    pub host: String => {
-        on_env -> ::std::env::var("EMAILS_SMTP_HOST").unwrap_or(localhost());
-        on_default -> localhost();
-    },
-
-    ///
-    /// The SMTP port to connect to
-    #[serde(default = "default_smtp_port")]
-    pub port: u16 => {
-        on_env -> ::std::env::var("EMAILS_SMTP_PORT").map(|p| p.parse::<u16>().expect("unable to parse value to u16")).unwrap_or(default_smtp_port());
-        on_default -> default_smtp_port();
-    }
-});
-
-fn localhost() -> String {
-    "127.0.0.1".into()
-}
-
-fn default_smtp_port() -> u16 {
-    587
-}
-
-generate_config_struct!(ServerConfig {
-    ///
-    /// Server port to bind to. By default, the email service will bind to
-    /// `32121`.
-    #[serde(default = "default_port")]
-    pub port: u16 => {
-        on_env -> ::std::env::var("EMAILS_SERVER_PORT").map(|p| p.parse::<u16>().expect("unable to parse value to u16")).unwrap_or(default_port());
-        on_default -> default_port();
-    },
-
-    ///
-    /// The host string to bind to. By default, the email service will bind to
-    /// `0.0.0.0`.
-    #[serde(default = "default_host")]
-    pub host: String => {
-        on_env -> ::std::env::var("EMAILS_SERVER_HOST").unwrap_or(default_host());
-        on_default -> default_host();
-    }
-});
-
-fn default_host() -> String {
-    "0.0.0.0".into()
-}
-
-fn default_port() -> u16 {
-    32121
-}
-
-generate_config_struct!(LogConfig {
-    ///
-    /// URL to connect to Logstash via TCP that outputs all logs into Logstash.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    logstash_uri: Option<String> => {
-        on_env -> ::std::env::var("EMAILS_LOGSTASH_URI").ok();
-        on_default -> None;
-    },
-
-    ///
-    /// The level to use when configuring the logger. By default, all information logging
-    /// will be outputted.
-    #[serde(default)]
-    pub level: LogLevel => {
-        on_env -> ::std::env::var("EMAILS_LOG_LEVEL").map(|p| p.parse::<LogLevel>().expect("unable to parse into log level")).unwrap_or_default();
-        on_default -> LogLevel::default();
-    },
-
-    ///
-    /// If the server should print out JSON logging instead of the default, prettier
-    /// logging.
-    #[serde(default = "default_json")]
-    pub json: bool => {
-        on_env -> ::std::env::var("EMAILS_LOG_IN_JSON").map(|f| f.parse::<bool>().expect("Unable to parse into boolean")).unwrap_or(false);
-        on_default -> false;
-    }
-});
-
-fn default_json() -> bool {
-    false
-}
-
-impl LogConfig {
-    pub fn logstash_uri(&self) -> Option<String> {
-        self.logstash_uri.clone()
-    }
 }
 
 impl Config {

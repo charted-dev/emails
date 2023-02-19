@@ -5,7 +5,7 @@
 
 The service also comes with pre-made templates that you can override easily from the `./templates` directory to suite your needs. Since this is a microservice that anyone can use, the templates can be customized to your liking.
 
-This repository also comes with the templates what we built for charted via the [react-email](#) NPM library, which is available in [./template-builder](./template-builder).
+This repository also comes with the templates what we built for charted via the [react-email](https://www.npmjs.com/package/react-email) NPM library, which is available in [./template-builder](./template-builder).
 
 ## Installation
 ### charted CLI

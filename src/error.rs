@@ -34,6 +34,12 @@ pub enum Error {
     #[error("Lettre error: {0}")]
     Lettre(#[from] lettre::error::Error),
 
+    #[error("{0}")]
+    Message(String),
+
+    #[error("SMTP error: {0}")]
+    SmtpError(#[from] lettre::transport::smtp::Error),
+
     #[error("Mustache error: {0}")]
     Mustache(#[from] mustache::Error),
 
