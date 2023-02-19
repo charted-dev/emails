@@ -69,7 +69,6 @@ jobs:
       - name: Install Protoc
         uses: Noelware/setup-protoc@1.0.0
         with:
-          version: 3.x
           repo-token: ${{secrets.GITHUB_TOKEN}}
 
       - name: Check for compile errors
