@@ -119,6 +119,8 @@ jobs:
           platforms: linux/amd64
           context: .
           file: ./distribution/docker/debian/Dockerfile
+          cache-from: type=gha,scope=debian-amd64
+          cache-to: type=gha,scope=debian-amd64
           push: true
           labels: |
             org.opencontainers.image.title=charted-emails
@@ -141,6 +143,8 @@ jobs:
           context: .
           file: ./distribution/docker/alpine/Dockerfile
           push: true
+          cache-from: type=gha,scope=alpine-amd64
+          cache-to: type=gha,scope=alpine-amd64
           labels: |
             org.opencontainers.image.title=charted-emails
             org.opencontainers.image.description=🐻‍❄️💌 charted's email service built in Rust that can be connected via gRPC
@@ -191,6 +195,8 @@ jobs:
           context: .
           file: ./distribution/docker/debian/Dockerfile
           push: true
+          cache-from: type=gha,scope=debian-arm64
+          cache-to: type=gha,scope=debian-arm64
           labels: |
             org.opencontainers.image.title=charted-emails
             org.opencontainers.image.description=🐻‍❄️💌 charted's email service built in Rust that can be connected via gRPC
@@ -212,6 +218,8 @@ jobs:
           context: .
           file: ./distribution/docker/alpine/Dockerfile
           push: true
+          cache-from: type=gha,scope=alpine-arm64
+          cache-to: type=gha,scope=alpine-arm64
           labels: |
             org.opencontainers.image.title=charted-emails
             org.opencontainers.image.description=🐻‍❄️💌 charted's email service built in Rust that can be connected via gRPC

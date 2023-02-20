@@ -13,27 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM rustlang/rust:nightly-alpine3.15 AS builder
+FROM rust:1.67-alpine AS builder
 
-RUN apk update && apk add --no-cache build-base openssl-dev gcompat libc6-compat libarchive-tools curl
+RUN apk update && apk add --no-cache build-base openssl-dev gcompat libc6-compat && apk add --no-cache protobuf-dev --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main
 
-# First, we need to install protoc
-ENV PROTOC_VERSION="22.0"
-RUN set -eux; \
-  arch="$(uname -m)"; \
-  case "${arch}" in \
-    aarch64|arm64) \
-      PROTOC_DOWNLOAD_URL="https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-aarch_64.zip"; \
-      ;; \
-    amd64|x86_64) \
-      PROTOC_DOWNLOAD_URL="https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"; \
-      ;; \
-  esac; \
-  mkdir -p /opt/protoc; \
-  curl -L ${PROTOC_DOWNLOAD_URL} | bsdtar xfz - --strip-components=1 -C /opt/protoc; \
-  chmod +x /opt/protoc/protoc;
-
-ENV PROTOC=/opt/protoc/protoc
 ENV CARGO_INCREMENTAL=1
 WORKDIR /build
 
