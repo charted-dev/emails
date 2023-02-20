@@ -8,11 +8,6 @@ The service also comes with pre-made templates that you can override easily from
 This repository also comes with the templates what we built for charted via the [react-email](https://www.npmjs.com/package/react-email) NPM library, which is available in [./template-builder](./template-builder).
 
 ## Installation
-### charted CLI
-You can directly run the this service if you installed **charted-server** before, it will grab the latest version and run it as the same or an background service, this is for if you wish to not install two programs at the same time, so it'll do it for you.
-
-Just run the `$ charted email-service` command and it will install (if it doesn't exist) and run it. This requires charted-server v0.4-nightly or higher.
-
 ### Docker
 To use the microservice with Docker, you will need to have the [Docker Engine](https://docker.com) or [Docker Desktop](https://docker.com/products/docker-desktop) installed on your machine. Once you have Docker installed, you can pull the Docker image from Noelware or GitHub's container registry, depends what you want to run:
 
