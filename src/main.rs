@@ -20,6 +20,7 @@ use emails::{
     EmailService, COMMIT_HASH, VERSION,
 };
 use log::*;
+use sentry_tower::NewSentryLayer;
 use tonic::transport::Server;
 
 #[tokio::main]
@@ -35,10 +36,12 @@ async fn main() -> Result {
     setup_utils::sentry(config)?;
 
     info!("email service v{}+{} - initializing", VERSION, COMMIT_HASH);
-    let http_addr = config.http_addr()?;
 
+    let http_addr = config.http_addr()?;
     info!("listening on http addr {http_addr}!");
+
     Server::builder()
+        .layer(NewSentryLayer::new_from_top())
         .add_service(EmailsServer::new(EmailService::new().await?))
         .serve(http_addr)
         .await
