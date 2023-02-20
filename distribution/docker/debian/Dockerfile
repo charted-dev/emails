@@ -64,6 +64,24 @@ RUN groupadd -g 1001 noelware && \
   chown 1001:1001 /app/noelware/charted/emails && \
   chmod +x /app/noelware/charted/emails/bin/emails /app/noelware/charted/emails/scripts/docker-entrypoint.sh
 
+# Install gRPC Health Probe so you can health-check this application
+ENV GRPC_HEALTH_PROBE_VERSION="0.4.15"
+RUN set -eux; \
+  arch="$(uname -m)"; \
+  case "${arch}" in \
+    aarch64|arm64) \
+      HEALTHPROBE_DOWNLOAD_URL=" https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v${PROTOC_VERSION}/grpc_health_probe-linux-arm64"; \
+      ;; \
+    amd64|x86_64) \
+      HEALTHPROBE_DOWNLOAD_URL=" https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v${PROTOC_VERSION}/grpc_health_probe-linux-amd64"; \
+      ;; \
+  esac; \
+  mkdir -p /opt/healthprobe; \
+  curl -fsSL -o /opt/healthprobe/healthprobe ${HEALTHPROBE_DOWNLOAD_URL} \
+  chmod +x /opt/healthprobe/healthprobe;
+
+RUN ln -s /opt/healthprobe/healthprobe /usr/bin/grpc-healthprobe
+
 USER noelware
 ENTRYPOINT ["/app/noelware/charted/emails/scripts/docker-entrypoint.sh"]
 CMD ["/app/noelware/charted/emails/bin/emails"]

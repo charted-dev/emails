@@ -81,11 +81,11 @@ impl EmailService {
             warn!("unable to send NOOP request to email server, things might break D:");
         }
 
+        let templates = TemplateEngine::new(config.templates.clone());
+        templates.init()?;
+
         info!("created smtp mailer!");
-        Ok(EmailService {
-            templates: TemplateEngine::new(config.templates.clone()),
-            mailer,
-        })
+        Ok(EmailService { templates, mailer })
     }
 }
 
@@ -273,10 +273,11 @@ fn prost_value_to_data(value: Kind) -> Data {
         Kind::StructValue(s) => {
             let mut res = HashMap::new();
             for (key, value) in s.fields {
-                if value.kind.clone().is_none() {
+                if value.kind.is_none() {
                     warn!(
-                        "map with key {key} value kind couldn't be determined, skipping!"
+                        "key [{key}] with value kind {:?} couldn't be determined, skipping!", value.kind
                     );
+
                     continue;
                 }
 
@@ -289,8 +290,8 @@ fn prost_value_to_data(value: Kind) -> Data {
         Kind::ListValue(ListValue { values }) => {
             let mut res: Vec<Data> = vec![];
             for (index, val) in values.iter().enumerate() {
-                if val.kind.clone().is_none() {
-                    warn!("value kind in index #{index} couldn't be determined, will be skipped");
+                if val.kind.is_none() {
+                    warn!("value kind in index #{index} ({:?}) couldn't be determined, will be skipped", val.kind);
                     continue;
                 }
 

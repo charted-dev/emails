@@ -321,7 +321,6 @@ jobs:
     name: Deploy to Noelware's infrastructure
     runs-on: ubuntu-latest
     needs: [manifests]
-    if: ${{false}}
     steps:
       - name: Get current release tag
         uses: auguwu/git-tag-action@master
@@ -331,7 +330,7 @@ jobs:
         run: mkdir ~/.kube && echo "${{secrets.KUBECONFIG}}" >> ~/.kube/config
 
       - name: Rollout image
-        run: kubectl set image deployment/charted-emails-service emails=ghcr.io/charted-dev/email-service:{{steps.tag.outputs.version}}-alpine --namespace noelware
+        run: kubectl set image deployment/charted-emails emails=ghcr.io/charted-dev/email-service:{{steps.tag.outputs.version}}-alpine --namespace noelware
 
       - name: Wait for completion
-        run: kubectl rollout status deployment/charted-emails-service
+        run: kubectl rollout status deployment/charted-emails

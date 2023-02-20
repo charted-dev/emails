@@ -13,7 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::path::{Path, PathBuf};
+use std::{
+    fs::create_dir,
+    path::{Path, PathBuf},
+};
 
 use crate::error::{Error, Result};
 use tokio::{fs::File, io::AsyncReadExt};
@@ -33,9 +36,24 @@ impl TemplateEngine {
         }
     }
 
+    pub fn init(&self) -> Result {
+        info!("initializing template engine...");
+
+        if !self.templates_dir.exists() {
+            warn!(
+                "templates in directory [{:?}] doesn't exist",
+                self.templates_dir
+            );
+
+            create_dir(self.templates_dir.clone()).map_err(Error::Io)?;
+        }
+
+        Ok(())
+    }
+
     /// Could the file in the path be found?
     pub async fn find<P: AsRef<Path>>(&self, path: P) -> Result<bool> {
-        match File::open(path.as_ref()).await {
+        match File::open(self.templates_dir.join(path.as_ref())).await {
             Ok(_) => Ok(true),
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(false),
             Err(e) => Err(Error::Io(e)),

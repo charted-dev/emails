@@ -17,7 +17,7 @@
 name = "emails"
 description = "🐻‍❄️💌 charted's email service built in Rust that can be connected via gRPC"
 homepage = "https://charts.noelware.org/docs/services/emails/latest"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Noel Miko <cutie@floofy.dev>", "Noelware Team <team@noelware.org>"]
 license = "Apache-2.0"
@@ -48,6 +48,7 @@ serde_yaml = "0.9.17"
 thiserror = "1.0.38"
 tokio = { version = "1.25.0", features = ["full"] }
 tonic = "0.8.3"
+tonic-health = "0.8.0"
 
 [build-dependencies]
 chrono = "0.4.23"

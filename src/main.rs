@@ -22,6 +22,7 @@ use emails::{
 use log::*;
 use sentry_tower::NewSentryLayer;
 use tonic::transport::Server;
+use tonic_health::server::health_reporter;
 
 #[tokio::main]
 async fn main() -> Result {
@@ -37,11 +38,16 @@ async fn main() -> Result {
 
     info!("email service v{}+{} - initializing", VERSION, COMMIT_HASH);
 
+    let (mut reporter, health_service) = health_reporter();
+    info!("created healthcheck reporter!");
+    reporter.set_serving::<EmailsServer<EmailService>>().await;
+
     let http_addr = config.http_addr()?;
     info!("listening on http addr {http_addr}!");
 
     Server::builder()
         .layer(NewSentryLayer::new_from_top())
+        .add_service(health_service)
         .add_service(EmailsServer::new(EmailService::new().await?))
         .serve(http_addr)
         .await
