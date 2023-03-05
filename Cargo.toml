@@ -43,7 +43,7 @@ sentry-log = "0.30.0"
 sentry-tower = "0.30.0"
 sentry-tracing = "0.30.0"
 serde = { version = "1.0.152", features = ["derive"] }
-serde_json = "1.0.93"
+serde_json = "1.0.94"
 serde_yaml = "0.9.18"
 thiserror = "1.0.38"
 tokio = { version = "1.26.0", features = ["full"] }
