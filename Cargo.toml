@@ -25,7 +25,7 @@ license = "Apache-2.0"
 [dependencies]
 ansi_term = "0.12.1"
 async-trait = "0.1.66"
-chrono = { version = "0.4.23", features = ["serde"] }
+chrono = { version = "0.4.24", features = ["serde"] }
 dotenv = "0.15.0"
 fern = "0.6.1"
 futures = { version = "0.3.27", default-features = false, features = ["std"] }
@@ -51,7 +51,7 @@ tonic = "0.8.3"
 tonic-health = "0.8.0"
 
 [build-dependencies]
-chrono = "0.4.23"
+chrono = "0.4.24"
 tonic-build = "0.8.4"
 
 [[bin]]
