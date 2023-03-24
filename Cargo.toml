@@ -24,7 +24,7 @@ license = "Apache-2.0"
 
 [dependencies]
 ansi_term = "0.12.1"
-async-trait = "0.1.67"
+async-trait = "0.1.68"
 chrono = { version = "0.4.24", features = ["serde"] }
 dotenv = "0.15.0"
 fern = "0.6.2"
