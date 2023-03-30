@@ -28,8 +28,8 @@ async-trait = "0.1.68"
 chrono = { version = "0.4.24", features = ["serde"] }
 dotenv = "0.15.0"
 fern = "0.6.2"
-futures = { version = "0.3.27", default-features = false, features = ["std"] }
-futures-util = "0.3.27"
+futures = { version = "0.3.28", default-features = false, features = ["std"] }
+futures-util = "0.3.28"
 lazy_static = "1.4.0"
 lettre = { version = "0.10.3", features = ["tracing", "hostname", "tokio1-native-tls", "tokio1"] }
 log = "0.4.17"
