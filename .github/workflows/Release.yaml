@@ -162,7 +162,7 @@ jobs:
             ghcr.io/charted-dev/email-service:latest-alpine-amd64
   docker-arm:
     name: Build Docker image (ARM64)
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
