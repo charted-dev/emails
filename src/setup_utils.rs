@@ -22,6 +22,7 @@ use std::{
 };
 
 use fern::Dispatch;
+use once_cell::sync::OnceCell;
 use sentry::{
     integrations::{backtrace::AttachStacktraceIntegration, panic::PanicIntegration},
     types::Dsn,
@@ -41,6 +42,7 @@ use crate::{
 
 lazy_static! {
     static ref ANSI_TERM_REGEX: Regex = Regex::new(r#"\u001b\[.*?m"#).unwrap();
+    static ref LOG_INIT: OnceCell<bool> = OnceCell::new();
 }
 
 /// Represents a writer that does nothing and discards information that is being written
@@ -59,6 +61,12 @@ impl Write for NullWriter {
 }
 
 unsafe impl Send for NullWriter {}
+
+/// Returns a `bool` if [logging] was called when we are running
+/// the server.
+pub fn log_was_init() -> bool {
+    *LOG_INIT.get().unwrap_or(&false)
+}
 
 pub fn sentry(config: &Config) -> Result {
     if let Some(dsn) = &config.sentry_dsn {
@@ -139,7 +147,7 @@ pub fn logging(config: &Config) -> Result {
                 let level = color.paint(format!("{:<5}", record.level()));
                 let (b1, b2) = (RGB(134, 134, 134).paint("["), RGB(134, 134, 134).paint("]"));
                 let (p1, p2) = (RGB(134, 134, 134).paint("("), RGB(134, 134, 134).paint(")"));
-                let target = RGB(120, 231, 255).paint(format!("{:<50}", record.target()));
+                let target = RGB(120, 231, 255).paint(format!("{:<25}", record.target()));
                 let thread_name = RGB(255, 105, 189).paint(format!("{name:>25}"));
                 let pid_colour = RGB(169, 147, 227).paint(pid.to_string());
 
@@ -203,5 +211,8 @@ pub fn logging(config: &Config) -> Result {
         },
     );
 
-    dispatch.apply().map_err(|e| to_dyn_error!(e)).map(|_| ())
+    dispatch.apply().map_err(|e| to_dyn_error!(e)).map(|_| {
+        LOG_INIT.set(true).unwrap();
+        ()
+    })
 }
