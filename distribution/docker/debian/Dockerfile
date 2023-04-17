@@ -52,7 +52,7 @@ RUN cargo build --release
 FROM debian:11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt upgrade -y && apt install -y bash tini
+RUN apt update && apt upgrade -y && apt install -y bash tini curl
 WORKDIR /app/noelware/charted/emails
 
 COPY --from=builder /build/target/release/emails /app/noelware/charted/emails/bin/emails
@@ -77,7 +77,7 @@ RUN set -eux; \
       ;; \
   esac; \
   mkdir -p /opt/healthprobe; \
-  curl -fsSL -o /opt/healthprobe/healthprobe ${HEALTHPROBE_DOWNLOAD_URL} \
+  curl -fsSL -o /opt/healthprobe/healthprobe ${HEALTHPROBE_DOWNLOAD_URL}; \
   chmod +x /opt/healthprobe/healthprobe;
 
 RUN ln -s /opt/healthprobe/healthprobe /usr/bin/grpc-healthprobe

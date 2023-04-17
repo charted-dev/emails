@@ -32,7 +32,7 @@ RUN cargo build --release
 
 FROM alpine:3.17
 
-RUN apk update && apk add --no-cache bash tini openssl-dev gcompat libc6-compat libgcc openssl1.1-compat
+RUN apk update && apk add --no-cache bash tini openssl-dev gcompat libc6-compat libgcc openssl1.1-compat curl
 WORKDIR /app/noelware/charted/emails
 
 COPY --from=builder /build/target/release/emails /app/noelware/charted/emails/bin/emails
@@ -57,7 +57,7 @@ RUN set -eux; \
       ;; \
   esac; \
   mkdir -p /opt/healthprobe; \
-  curl -fsSL -o /opt/healthprobe/healthprobe ${HEALTHPROBE_DOWNLOAD_URL} \
+  curl -fsSL -o /opt/healthprobe/healthprobe ${HEALTHPROBE_DOWNLOAD_URL}; \
   chmod +x /opt/healthprobe/healthprobe;
 
 RUN ln -s /opt/healthprobe/healthprobe /usr/bin/grpc-healthprobe
