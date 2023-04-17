@@ -83,6 +83,18 @@ jobs:
           endpoint: ${{secrets.S3_ENDPOINT}}
           prefix: /noelware/artifacts
           bucket: august
+
+      - name: Upload artifacts to Noelware's Artifact Registry [latest]
+        uses: Noelware/s3-action@2.1.0
+        with:
+          enforce-path-access-style: true
+          files: ./target/${{matrix.dist.target}}/release/emails${{matrix.dist.ext}}
+          path-format: $(prefix)/charted/emails/latest/email-service-${{matrix.dist.os}}-${{matrix.dist.arch}}${{matrix.dist.ext}}
+          access-key-id: ${{secrets.S3_ACCESS_KEY}}
+          secret-key: ${{secrets.S3_SECRET_KEY}}
+          endpoint: ${{secrets.S3_ENDPOINT}}
+          prefix: /noelware/artifacts
+          bucket: august
   docker-x64:
     name: Build Docker image (x86_64)
     runs-on: ubuntu-latest
