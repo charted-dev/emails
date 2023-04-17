@@ -70,10 +70,10 @@ RUN set -eux; \
   arch="$(uname -m)"; \
   case "${arch}" in \
     aarch64|arm64) \
-      HEALTHPROBE_DOWNLOAD_URL=" https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v${PROTOC_VERSION}/grpc_health_probe-linux-arm64"; \
+      HEALTHPROBE_DOWNLOAD_URL=" https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-arm64"; \
       ;; \
     amd64|x86_64) \
-      HEALTHPROBE_DOWNLOAD_URL=" https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v${PROTOC_VERSION}/grpc_health_probe-linux-amd64"; \
+      HEALTHPROBE_DOWNLOAD_URL=" https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64"; \
       ;; \
   esac; \
   mkdir -p /opt/healthprobe; \
