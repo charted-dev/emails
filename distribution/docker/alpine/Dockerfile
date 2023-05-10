@@ -30,7 +30,7 @@ RUN rm dummy.rs && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY . .
 RUN cargo build --release
 
-FROM alpine:3.17
+FROM alpine:3.18
 
 RUN apk update && apk add --no-cache bash tini openssl-dev gcompat libc6-compat libgcc openssl1.1-compat curl
 WORKDIR /app/noelware/charted/emails
