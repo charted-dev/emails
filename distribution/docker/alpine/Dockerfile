@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM rust:1.69-alpine AS builder
+FROM rust:1.70-alpine AS builder
 
 RUN apk update && apk add --no-cache build-base openssl-dev gcompat libc6-compat && apk add --no-cache protobuf-dev --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main
 
