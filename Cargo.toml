@@ -39,7 +39,7 @@ prost = "0.11.9"
 prost-types = "0.11.9"
 regex = "1.9.4"
 sentry = { version = "0.31.6", features = ["backtrace", "log", "panic", "tracing"] }
-sentry-log = "0.31.5"
+sentry-log = "0.31.6"
 sentry-tower = "0.31.5"
 sentry-tracing = "0.31.5"
 serde = { version = "1.0.188", features = ["derive"] }
