@@ -73,7 +73,7 @@ jobs:
           files: ./target/${{matrix.dist.target}}/release/emails-${{matrix.dist.os}}-${{matrix.dist.arch}}${{matrix.dist.ext}}
 
       - name: Upload artifacts to Noelware's Artifact Registry
-        uses: Noelware/s3-action@2.1.0
+        uses: Noelware/s3-action@2.2.1
         with:
           enforce-path-access-style: true
           files: ./target/${{matrix.dist.target}}/release/emails${{matrix.dist.ext}}
@@ -85,7 +85,7 @@ jobs:
           bucket: august
 
       - name: Upload artifacts to Noelware's Artifact Registry [latest]
-        uses: Noelware/s3-action@2.1.0
+        uses: Noelware/s3-action@2.2.1
         with:
           enforce-path-access-style: true
           files: ./target/${{matrix.dist.target}}/release/emails${{matrix.dist.ext}}
