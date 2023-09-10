@@ -266,7 +266,7 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: Merge Debian [latest] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:latest
@@ -275,7 +275,7 @@ jobs:
             ghcr.io/charted-dev/email-service:latest-arm64
 
       - name: Merge Debian [${{steps.tag.outputs.major}}] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}
@@ -284,7 +284,7 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-arm64
 
       - name: Merge Debian [${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}
@@ -293,7 +293,7 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}-arm64
 
       - name: Merge Debian [{{steps.tag.outputs.version}}] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}
@@ -302,7 +302,7 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}-arm64
 
       - name: Merge Alpine [latest] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:alpine
@@ -311,7 +311,7 @@ jobs:
             ghcr.io/charted-dev/email-service:alpine-arm64
 
       - name: Merge Alpine [${{steps.tag.outputs.major}}] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine
@@ -320,7 +320,7 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}-alpine-arm64
 
       - name: Merge Debian [${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}-alpine
@@ -329,7 +329,7 @@ jobs:
             ghcr.io/charted-dev/email-service:${{steps.tag.outputs.major}}.${{steps.tag.outputs.minor}}-alpine-arm64
 
       - name: Merge Debian [{{steps.tag.outputs.version}}] images
-        uses: Noelware/docker-manifest-action@0.3.1
+        uses: Noelware/docker-manifest-action@0.4.0
         with:
           push: true
           inputs: ghcr.io/charted-dev/email-service:${{steps.tag.outputs.version}}-alpine
