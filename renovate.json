@@ -1,16 +1,17 @@
 {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:base", "docker:disableMajor"],
     "automerge": true,
-    "extends": ["config:base", "default:timezone(America/Phoenix)", "docker:disableMajor"],
+    "automergeSchedule": ["at any time"],
+    "timezone": "America/Los_Angeles",
     "vulnerabilityAlerts": {
         "labels": ["security"]
     },
-    "java": {
-        "packageRules": [
-            {
-                "matchPackagePatterns": ["^org\\.noelware[.:]"],
-                "matchManagers": ["gradle"],
-                "registryUrls": ["https://maven.noelware.org", "https://maven.noelware.org/snapshots"]
-            }
-        ]
-    }
+    "regexManagers": [
+        {
+            "description": "Allow updating software versions in Dockerfiles",
+            "fileMatch": ["distribution/docker/alpine.Dockerfile", "distribution/docker/debian.Dockerfile"],
+            "matchStrings": ["datasource=(?<datasource>.*?) name=(?<depName>.*?)\\sENV \\w+_VERSION=\"(?<currentValue>.*)\""]
+        }
+    ]
 }

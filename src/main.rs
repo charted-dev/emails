@@ -13,43 +13,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::env::var;
-
-use emails::{
-    emails_server::EmailsServer, error::Result, setup_utils, to_dyn_error, Config,
-    EmailService, COMMIT_HASH, VERSION,
-};
-use log::*;
-use sentry_tower::NewSentryLayer;
-use tonic::transport::Server;
-use tonic_health::server::health_reporter;
-
-#[tokio::main]
-async fn main() -> Result {
-    dotenv::dotenv().unwrap_or_default();
-    match var("EMAILS_CONFIG_FILE") {
-        Ok(p) => Config::load(Some(p))?,
-        Err(_) => Config::load::<String>(None)?,
-    };
-
-    let config = Config::get();
-    setup_utils::logging(config)?;
-    setup_utils::sentry(config)?;
-
-    info!("email service v{}+{} - initializing", VERSION, COMMIT_HASH);
-
-    let (mut reporter, health_service) = health_reporter();
-    info!("created healthcheck reporter!");
-    reporter.set_serving::<EmailsServer<EmailService>>().await;
-
-    let http_addr = config.http_addr()?;
-    info!("listening on http addr {http_addr}!");
-
-    Server::builder()
-        .layer(NewSentryLayer::new_from_top())
-        .add_service(health_service)
-        .add_service(EmailsServer::new(EmailService::new().await?))
-        .serve(http_addr)
-        .await
-        .map_err(|e| to_dyn_error!(e))
-}
+fn main() {}

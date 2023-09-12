@@ -13,9 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-use_field_init_shorthand = true
-match_arm_leading_pipes = "Preserve"
-use_try_shorthand = true
-newline_style = "Unix" # keep it consistent
-max_width = 120
-edition = "2021"
+# This is the default configuration file. You can edit this to your heart's desires!~
+# Read up more on the configuration: https://charts.noelware.org/docs/emails/latest/self-hosting/configuration
+#
+# This file just sets the template directory to /var/lib/noelware/charted/emails/templates
+
+templates:
+  directory: /var/lib/noelware/charted/emails/templates
