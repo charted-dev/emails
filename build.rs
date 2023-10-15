@@ -28,9 +28,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("cargo:rerun-if-changed=protos/emails.proto");
     println!("cargo:rerun-if-changed=build.rs");
 
-    let commit_hash = execute("git", &["rev-parse", "--short=8", "HEAD"])
-        .unwrap_or_else(|_| "noeluwu8".into());
-
+    let commit_hash = execute("git", &["rev-parse", "--short=8", "HEAD"]).unwrap_or_else(|_| "noeluwu8".into());
     let build_date = {
         let now = SystemTime::now();
         let utc: DateTime<Utc> = now.into();
@@ -38,6 +36,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         utc.to_rfc3339()
     };
 
+    let rustc_version = rustc_version::version().map(|s| s.to_string()).unwrap();
+
+    println!("cargo:rustc-env=SERVICE_RUSTC_VERSION={rustc_version}");
     println!("cargo:rustc-env=SERVICE_COMMIT_HASH={commit_hash}");
     println!("cargo:rustc-env=SERVICE_BUILD_DATE={build_date}");
 
