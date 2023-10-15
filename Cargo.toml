@@ -17,7 +17,7 @@
 name = "charted-emails"
 description = "🐻‍❄️💌 charted's email service built in Rust that can be connected via gRPC"
 homepage = "https://charts.noelware.org/docs/services/emails/latest"
-version = "0.0.0-devel.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Noel Towa <cutie@floofy.dev>", "Noelware Team <team@noelware.org>"]
 license = "Apache-2.0"
