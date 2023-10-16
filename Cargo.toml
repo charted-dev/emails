@@ -55,7 +55,7 @@ url = "2.4.1"
 [build-dependencies]
 chrono = "0.4.31"
 rustc_version = "0.4.0"
-tonic-build = "0.10.0"
+tonic-build = "0.10.2"
 
 [profile.release]
 strip = true
