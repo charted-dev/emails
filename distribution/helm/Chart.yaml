@@ -36,5 +36,5 @@ annotations:
     charts.noelware.org/type: application
 dependencies:
     - name: common
-      version: ~2.9.2
+      version: ~2.13.0
       repository: https://charts.bitnami.com/bitnami
