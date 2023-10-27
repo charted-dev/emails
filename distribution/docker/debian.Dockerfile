@@ -34,7 +34,7 @@ COPY distribution/docker/scripts               /app/noelware/charted/emails/scri
 COPY distribution/config                       /app/noelware/charted/emails/config
 
 # renovate: datasource=github-tags name=grpc-ecosystem/grpc-health-probe
-ENV GRPC_HEALTH_PROBE_VERSION="v0.4.21"
+ENV GRPC_HEALTH_PROBE_VERSION="v0.4.22"
 RUN set -eux; \
     arch="$(uname -m)"; \
     case "${arch}" in \
