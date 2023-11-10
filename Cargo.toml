@@ -38,7 +38,7 @@ prost = "0.12.1"
 prost-types = "0.12.1"
 regex = "1.10.2"
 remi-fs = { version = "0.4.2", features = ["log"] }
-sentry = "0.31.7"
+sentry = "0.31.8"
 sentry-tower = "0.31.7"
 sentry-tracing = "0.31.7"
 serde = { version = "1.0.192", features = ["derive"] }
