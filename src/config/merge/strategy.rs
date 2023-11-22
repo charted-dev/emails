@@ -32,7 +32,7 @@ pub mod strings {
     ///
     /// ## Example
     /// ```no_run
-    /// # use noelware_merge::strategy::strings::overwrite_empty;
+    /// # use charted_emails::config::merge::strategy::strings::overwrite_empty;
     /// #
     /// let mut a = String::new();
     /// let b = String::from("overwritten!");
