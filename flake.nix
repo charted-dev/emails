@@ -84,7 +84,7 @@
           pname = "emails-clippy";
         });
 
-      # build the emails cli and server
+      # build the emails server
       emails = craneLib.buildPackage (commonArgs
         // {
           inherit artifacts;
@@ -106,11 +106,13 @@
           cargo-expand
           protobuf
           openssl
+          grpcurl
           cargo
           rust
         ];
 
         shellHook = ''
+          export LD_LIBRARY_PATH="${pkgs.openssl.out}/lib"
           export RUSTFLAGS="--cfg tokio_unstable ${rustflags}"
         '';
       };

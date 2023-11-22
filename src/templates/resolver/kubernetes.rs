@@ -60,8 +60,6 @@ impl KubernetesTemplateResolver {
 
 #[async_trait]
 impl TemplateResolver for KubernetesTemplateResolver {
-    const NAME: &'static str = "kubernetes";
-
     #[instrument(
         name = "emails.resolvers.kubernetes.pull",
         skip_all,

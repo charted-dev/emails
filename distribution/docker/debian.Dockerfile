@@ -31,7 +31,7 @@ WORKDIR /app/noelware/charted/emails
 
 COPY --from=build /build/target/release/emails /app/noelware/charted/emails/bin/emails
 COPY distribution/docker/scripts               /app/noelware/charted/emails/scripts
-COPY distribution/config                       /app/noelware/charted/emails/config
+COPY distribution/docker/config                /app/noelware/charted/emails/config
 
 # renovate: datasource=github-tags name=grpc-ecosystem/grpc-health-probe
 ENV GRPC_HEALTH_PROBE_VERSION="v0.4.22"

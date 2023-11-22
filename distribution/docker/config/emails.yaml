@@ -19,4 +19,5 @@
 # This file just sets the template directory to /var/lib/noelware/charted/emails/templates
 
 templates:
-  directory: /var/lib/noelware/charted/emails/templates
+  filesystem:
+    directory: /var/lib/noelware/charted/emails/templates

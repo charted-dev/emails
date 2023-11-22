@@ -35,4 +35,14 @@ pub mod config;
 pub mod logging;
 pub mod service;
 pub mod templates;
-pub mod utils;
+
+pub(crate) mod protos {
+    tonic::include_proto!("noelware.charted.emails");
+
+    pub(crate) const FILE_DESCRIPTOR_SET: &[u8] = tonic::include_file_descriptor_set!("descriptor");
+}
+
+pub use protos::{
+    emails_server::{Emails, EmailsServer},
+    Error, PingRequest, PingResponse, SendEmailRequest, SendEmailResponse,
+};

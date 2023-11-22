@@ -37,8 +37,6 @@ impl GitTemplateResolver {
 
 #[async_trait]
 impl TemplateResolver for GitTemplateResolver {
-    const NAME: &'static str = "git";
-
     async fn init(&self) -> Result<()> {
         if !self.root_path.try_exists()? {
             warn!(

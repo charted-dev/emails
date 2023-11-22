@@ -14,3 +14,51 @@
 // limitations under the License.
 
 pub mod resolver;
+
+use crate::{config::TryFromEnv, var};
+use eyre::Report;
+use remi_fs::FilesystemStorageConfig;
+use serde::{Deserialize, Serialize};
+
+/// Represents the configuration for how to resolve templates.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Config {
+    /// Uses the local filesystem to find and use templates from. All files
+    /// must be valid UTF-8 or the server will panic, but won't crash
+    /// the whole program.
+    Filesystem(FilesystemStorageConfig),
+
+    /// Uses the Kubernetes API to resolve templates from a [`ConfigMap`](https://kubernetes.io/docs/concepts/configuration/configmap) reference.
+    Kubernetes,
+
+    /// Uses a Git repository to resolve templates from. It'll be mounted into `${templates.git.directory}/templates`. The
+    /// resolver also supports SSH connections.
+    Git,
+}
+
+impl Default for Config {
+    fn default() -> Config {
+        let config = FilesystemStorageConfig::new(String::from("./templates"));
+        Config::Filesystem(config)
+    }
+}
+
+impl TryFromEnv for Config {
+    type Output = Config;
+    type Err = Report;
+
+    fn try_from_env() -> Result<Self::Output, Self::Err> {
+        match var!("EMAILS_TEMPLATE_RESOLVER", is_optional: true) {
+            Some(resolver) => match resolver.as_str() {
+                "filesystem" | "fs" => Ok(Default::default()),
+                "kubernetes" => Ok(Config::Kubernetes),
+                "git" => Ok(Config::Git),
+                resolver => Err(eyre!(
+                    "wanted [filesystem/fs, kubernetes, git]; received {resolver} instead"
+                )),
+            },
+            None => Ok(Default::default()),
+        }
+    }
+}

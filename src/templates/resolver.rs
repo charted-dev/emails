@@ -22,10 +22,7 @@ pub mod kubernetes;
 
 /// Represents a trait that allows to resolve templates from any canonical source.
 #[async_trait]
-pub trait TemplateResolver {
-    /// Returns the name of this [`TemplateResolver`].
-    const NAME: &'static str;
-
+pub trait TemplateResolver: Send + Sync {
     /// Allows this [`TemplateResolver`] to do pre-initialization (i.e, pull git repositories or load
     /// the Kubernetes configuration).
     async fn init(&self) -> Result<()> {

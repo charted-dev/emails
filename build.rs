@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use chrono::{DateTime, Utc};
-use std::{error::Error, ffi::OsStr, process::Command, time::SystemTime};
+use std::{env, error::Error, ffi::OsStr, path::PathBuf, process::Command, time::SystemTime};
 
 fn execute<T>(command: T, args: &[&str]) -> Result<String, Box<dyn Error + 'static>>
 where
@@ -43,7 +43,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("cargo:rustc-env=SERVICE_BUILD_DATE={build_date}");
 
     // build the protobufs
-    tonic_build::compile_protos("./protos/emails.proto")?;
+    tonic_build::configure()
+        .file_descriptor_set_path(PathBuf::from(env::var("OUT_DIR").unwrap()).join("descriptor.bin"))
+        .compile(&["./protos/emails.proto"], &["./protos"])
+        .unwrap();
 
     Ok(())
 }
