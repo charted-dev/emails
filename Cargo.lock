@@ -569,9 +569,9 @@ checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
 
 [[package]]
 name = "file-format"
-version = "0.21.0"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "888c5782fda56d3bfa40339d7fc4e2d57191d42fd2708557d9963f5e5e3e9ca0"
+checksum = "7fcb859e047d667f798f913a2cd0d5c214b85944d1191efa8146c98888fc557b"
 
 [[package]]
 name = "findshlibs"
@@ -1832,9 +1832,9 @@ dependencies = [
 
 [[package]]
 name = "remi-fs"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de8c727d2aac68656c5540de2383e939d238342be49d80b7e96d35aa99e80126"
+checksum = "39ed3e42c17da520748e0bb0fb37d243787d80a8ff88309066746fa6fcf3c748"
 dependencies = [
  "async-trait",
  "bytes",
