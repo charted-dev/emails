@@ -1820,9 +1820,9 @@ checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "remi-core"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53d550a558f95990a128875269113b4feec1b65b12344e9a78307a872dc3efdf"
+checksum = "3a99a5777dd57d28504625e2c088bf35838a62d84ef545bb0489b3e97a71a915"
 dependencies = [
  "async-trait",
  "bytes",
