@@ -52,7 +52,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Setup protoc
-              uses: Noelware/setup-protoc@1.1.0
+              uses: Noelware/setup-protoc@1.2.0
               id: protoc
               with:
                   repo-token: ${{secrets.GITHUB_TOKEN}}
@@ -79,7 +79,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Setup protoc
-              uses: Noelware/setup-protoc@1.1.0
+              uses: Noelware/setup-protoc@1.2.0
               id: protoc
               with:
                   repo-token: ${{secrets.GITHUB_TOKEN}}

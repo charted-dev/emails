@@ -71,7 +71,7 @@ jobs:
               uses: Swatinem/rust-cache@v2
 
             - name: Setup protoc
-              uses: Noelware/setup-protoc@1.1.0
+              uses: Noelware/setup-protoc@1.2.0
 
             - name: Build release binary
               run: cargo build --release --target=${{matrix.target}}
