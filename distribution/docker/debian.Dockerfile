@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM rust:1.75-slim-bullseye AS build
+FROM rust:1.76-slim-bullseye AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt upgrade -y && apt install -y curl libssl-dev libarchive-tools pkg-config protobuf-compiler libgit2
