@@ -37,7 +37,7 @@ once_cell = "1.19.0"
 owo-colors = { version = "4.0.0", features = ["supports-colors"] }
 prost = "0.12.3"
 prost-types = "0.12.3"
-regex = "1.10.3"
+regex = "1.10.4"
 remi-core = "0.4.3"
 remi-fs = { version = "0.4.3", features = ["serde", "log"] }
 sentry = "0.32.2"
