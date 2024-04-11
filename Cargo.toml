@@ -23,7 +23,7 @@ authors = ["Noel Towa <cutie@floofy.dev>", "Noelware Team <team@noelware.org>"]
 license = "Apache-2.0"
 
 [dependencies]
-async-trait = "0.1.79"
+async-trait = "0.1.80"
 chrono = "0.4.37"
 color-eyre = "0.6.3"
 dotenv = "0.15.0"
