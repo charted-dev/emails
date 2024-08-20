@@ -23,7 +23,7 @@ WORKDIR /build
 COPY . .
 RUN cargo build --release
 
-FROM alpine:3.19
+FROM alpine:3.20
 
 RUN apk update && apk add --no-cache bash tini curl libgit2
 WORKDIR /app/noelware/charted/emails
