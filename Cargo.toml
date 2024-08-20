@@ -39,7 +39,7 @@ prost = "0.12.4"
 prost-types = "0.12.4"
 regex = "1.10.4"
 remi-core = "0.4.3"
-remi-fs = { version = "0.4.3", features = ["serde", "log"] }
+remi-fs = { version = "0.8.0", features = ["serde", "log"] }
 sentry = "0.32.3"
 sentry-tower = "0.32.3"
 sentry-tracing = "0.32.3"
